@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+coverage/
+dist/
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.csv
+*.qfx
+*.ofx
+exports/
+private-data/
