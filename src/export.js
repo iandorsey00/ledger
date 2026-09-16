@@ -78,6 +78,8 @@ export function drawReport(canvas, report, mode, currency = 'USD') {
     const measured = context.measureText(value).width; const tx = index === 0 ? px : index === report.observations.length - 1 ? px - measured : px - measured / 2; const ty = Math.max(y + 24, py - 18);
     context.fillStyle = '#f4f3ef'; context.fillRect(tx - 5, ty - 18, measured + 10, 24); context.fillStyle = '#181817'; context.fillText(value, tx, ty);
   });
-  context.fillStyle = '#63635f'; context.font = '20px Helvetica Neue, Arial, sans-serif'; context.textAlign = 'left';
+  context.fillStyle = '#63635f'; context.font = '17px Helvetica Neue, Arial, sans-serif'; context.textAlign = 'left';
+  if (report.staleComponents || report.missingComponents) context.fillText(label(report.missingComponents ? 'shareMissing' : 'shareStale', mode), 72, 800);
+  context.font = '20px Helvetica Neue, Arial, sans-serif';
   context.fillText(label('dataStaysLocal', mode), 72, 830);
 }

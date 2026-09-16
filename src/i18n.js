@@ -35,6 +35,16 @@ messages.en.blankBalancesIgnored = 'Blank pending balances ignored';
 messages.zh.blankBalancesIgnored = '已忽略空白待处理余额';
 messages.en.all = 'All';
 messages.zh.all = '全部';
+Object.assign(messages.en, { totalDeposits: 'Total deposits', availableCash: 'Available cash', cd: 'Certificate of deposit (CD)', other: 'Other deposit', addAccount: 'Add account', accountTitle: 'Add deposit account', accountHelp: 'Create a separate balance history for each account.', accountName: 'Account name', accountType: 'Account type', maturityDate: 'Maturity date (optional)', allAccounts: 'All accounts', accountNameError: 'Enter a distinct account name.', incompleteAccounts: 'Accounts without balances are not included:', carriedBalances: 'Some account balances are carried forward from earlier dates:' });
+Object.assign(messages.zh, { totalDeposits: '存款总额', availableCash: '可用现金', cd: '定期存款（CD）', other: '其他存款', addAccount: '添加账户', accountTitle: '添加存款账户', accountHelp: '为每个账户建立独立的余额记录。', accountName: '账户名称', accountType: '账户类型', maturityDate: '到期日（可选）', allAccounts: '所有账户', accountNameError: '请输入不重复的账户名称。', incompleteAccounts: '以下账户尚无余额，未计入总额：', carriedBalances: '部分账户余额沿用较早日期的记录：' });
+messages.en.shareStale = 'Some balances use earlier observations; check the account dates in the app.';
+messages.zh.shareStale = '部分余额采用较早的记录；请在应用中核对各账户日期。';
+messages.en.shareMissing = 'Accounts without balance data are excluded from this total.';
+messages.zh.shareMissing = '尚无余额数据的账户未计入此总额。';
+messages.en.matures = 'Matures';
+messages.zh.matures = '到期日';
+messages.en.observations = 'observations';
+messages.zh.observations = '条余额记录';
 
 export function label(key, mode = 'en') {
   if (mode === 'bi') return `${messages.en[key]} / ${messages.zh[key]}`;

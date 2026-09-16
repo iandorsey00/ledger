@@ -25,6 +25,7 @@ export function combineAccountObservations(observations, accountIds) {
 }
 
 export function combineSynchronizedAccountObservations(observations, accountIds) {
+  if (!accountIds.length) return [];
   const grouped = new Map(accountIds.map(id => [id, normalizeObservations(observations.filter(item => item.accountId === id))]));
   if ([...grouped.values()].some(items => !items.length)) return [];
   const commonDates = [...new Set(grouped.get(accountIds[0]).map(item => item.date))].filter(date => accountIds.every(id => grouped.get(id).some(item => item.date === date))).sort();
@@ -36,6 +37,31 @@ export function combineSynchronizedAccountObservations(observations, accountIds)
   const latestDate = latestComponents.map(component => component.observation.date).sort().at(-1);
   if (!combined.some(item => item.date === latestDate)) combined.push({ date: latestDate, balance: latestComponents.reduce((sum, component) => sum + component.observation.balance, 0), components: latestComponents, synchronized: latestComponents.every(component => component.observation.date === latestDate) });
   return combined.sort((a, b) => a.date.localeCompare(b.date));
+}
+
+export function combineDepositObservations(observations, accounts) {
+  const cashIds = accounts.filter(account => account.type === 'checking' || account.type === 'savings').map(account => account.id);
+  const otherIds = accounts.filter(account => !cashIds.includes(account.id)).map(account => account.id);
+  const grouped = new Map(accounts.map(account => [account.id, normalizeObservations(observations.filter(item => item.accountId === account.id))]));
+  const activeIds = accounts.filter(account => grouped.get(account.id).length).map(account => account.id);
+  if (!activeIds.length) return [];
+  const activeCash = cashIds.filter(id => grouped.get(id).length);
+  const cash = activeCash.length > 1 ? combineSynchronizedAccountObservations(observations, activeCash) : activeCash.length ? grouped.get(activeCash[0]).map(item => ({ date: item.date, balance: item.balance, components: [{ accountId: activeCash[0], observation: item }], synchronized: true })) : [];
+  const dates = new Set(cash.map(item => item.date));
+  if (!cash.length) for (const id of otherIds) for (const item of grouped.get(id)) dates.add(item.date);
+  const latestDate = activeIds.map(id => grouped.get(id).at(-1).date).sort().at(-1);
+  dates.add(latestDate);
+  return [...dates].sort().flatMap(date => {
+    const cashPoint = cash.filter(item => item.date <= date).at(-1);
+    if (activeCash.length && !cashPoint) return [];
+    const components = [...(cashPoint?.components || [])];
+    for (const id of otherIds) {
+      const observation = observationOnOrBefore(grouped.get(id), date);
+      if (observation) components.push({ accountId: id, observation });
+    }
+    if (!components.length) return [];
+    return [{ date, balance: components.reduce((sum, component) => sum + component.observation.balance, 0), components, synchronized: components.every(component => component.observation.date === date) }];
+  });
 }
 
 export function calculateReport(observations, startDate, endDate) {

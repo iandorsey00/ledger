@@ -1,6 +1,6 @@
 # 家计 Ledger
 
-A privacy-focused, local-first balance dashboard. Version 0.2 is an offline-capable browser application with separate Checking and Savings accounts, a derived combined-cash view, synthetic starter data, manual balance observations, mapped CSV import, arbitrary reporting periods, and summary-only PNG/CSV export.
+A privacy-focused, local-first balance dashboard. The dashboard opens on Total deposits, with separate account histories, an Available cash view, synthetic starter data, manual balance observations, mapped CSV import, arbitrary reporting periods, and summary-only PNG/CSV export.
 
 ## Run
 
@@ -14,17 +14,19 @@ Open `http://127.0.0.1:4173`. Run tests with `npm test`.
 
 ## Import workflow
 
-- Import Checking and Savings CSV files together or separately.
+- Add multiple Checking, Savings, CD, or other deposit accounts. A CD can optionally have a maturity date; the app does not forecast interest or treat it as available cash.
+- Import balance CSV files into several accounts together or separately. Choose the destination account before selecting each file.
 - Map the bank's date and running-balance columns. Transaction amount, debit, and credit columns are not balances.
 - Oldest-first and newest-first files are detected automatically. Mixed or ambiguous ordering requires an explicit choice.
 - Multiple transactions on one date are reduced to the daily closing balance. Pending rows with blank balances are ignored.
 - Imports replace the selected account's existing observations by default, preventing stale rows from previous datasets.
-- Combined history uses synchronized account dates to avoid temporary transfer-related changes. A warning appears when the latest account dates differ.
+- Total deposits sums accounts with balance observations; accounts without observations are excluded and disclosed. Available cash uses Checking and Savings only.
+- Total-deposit history uses synchronized liquid-account dates to avoid temporary transfer-related changes, carries sparse CD balances forward only after their first observation, and discloses stale component dates. A transfer whose account updates arrive on different dates can still make the latest total provisional; review the displayed as-of dates.
 
 ## Privacy and security
 
 - The app makes no network requests. Its Content Security Policy sets `connect-src 'none'`.
-- Accounts and balance observations are stored in browser IndexedDB for the local origin. Combined cash is calculated locally without merging the source accounts.
+- Accounts, optional CD maturity dates, and balance observations are stored in browser IndexedDB for the local origin. Totals are calculated locally without merging the source accounts.
 - CSV parsing, calculations, charts, and exports happen in the browser.
 - Summary exports contain dates and balance aggregates only. They never include source filenames or transaction descriptions.
 - Synthetic data is installed on first launch. Real financial data must never be committed to this repository.
