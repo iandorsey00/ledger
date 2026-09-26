@@ -15,7 +15,7 @@ Open `http://127.0.0.1:4173`. Run tests with `npm test`.
 ## Import workflow
 
 - Add multiple Checking, Savings, CD, or other deposit accounts. A CD can optionally have a maturity date; the app does not forecast interest or treat it as available cash.
-- Import balance CSV files into several accounts together or separately. Choose the destination account before selecting each file.
+- Import balance CSV files into several accounts together or separately. Choose the destination account before selecting each file, or add another account without leaving the import workflow.
 - Map the bank's date and running-balance columns. Transaction amount, debit, and credit columns are not balances.
 - Oldest-first and newest-first files are detected automatically. Mixed or ambiguous ordering requires an explicit choice.
 - Multiple transactions on one date are reduced to the daily closing balance. Pending rows with blank balances are ignored.
