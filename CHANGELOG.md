@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-09-15
+
+- Make Total deposits the default dashboard view, with Available cash as a separate Checking-and-Savings view.
+- Add multiple named Checking, Savings, CD, and other deposit accounts, with optional CD maturity dates.
+- Make manual entry, CSV import staging, and data-clearing scopes account-driven, with account creation available directly from the import dialog.
+- Include CD balances only after their first observation; use synchronized liquid-account dates for historical totals.
+- Disclose omitted accounts and carried-forward balance dates in the dashboard and PNG sharing.
+- Localize the new account and total labels in English, Chinese, and bilingual reports.
+
 ## 0.2.0 — 2026-08-17
 
 - Add separate Checking and Savings accounts with a combined-cash view.
